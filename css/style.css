@@ -930,6 +930,14 @@ h1, h2, h3, h4, h5, h6 {
     background: linear-gradient(135deg, #3e2723 0%, #1b0000 100%);
 }
 
+.lambda-product {
+    background: linear-gradient(135deg, #8bc34a 0%, #cddc39 50%, #ffeb3b 100%);
+}
+
+.jayaka-product {
+    background: linear-gradient(135deg, #ffd700 0%, #ffb300 50%, #8d6e63 100%);
+}
+
 .litchi-product {
     background: linear-gradient(135deg, #f8bbd0 0%, #f48fb1 100%);
 }
