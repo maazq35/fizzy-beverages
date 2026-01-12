@@ -165,31 +165,73 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Active navigation link highlighting
+    // Active navigation link highlighting (for desktop/laptop)
     const navLinks = document.querySelectorAll('.navbar-nav .nav-link');
     const sections = document.querySelectorAll('section[id]');
+    const heroSection = document.querySelector('.hero-section');
 
     function highlightNavigation() {
+        // Only apply on desktop/laptop screens (width > 768px)
+        if (window.innerWidth <= 768) {
+            return;
+        }
+
         const scrollY = window.pageYOffset;
+        const heroHeight = heroSection ? heroSection.offsetHeight : 0;
+        let activeFound = false;
 
-        sections.forEach(section => {
-            const sectionHeight = section.offsetHeight;
-            const sectionTop = section.offsetTop - 120;
-            const sectionId = section.getAttribute('id');
+        // Check if we're at the top (hero section) - highlight Home
+        if (scrollY < heroHeight * 0.3) {
+            navLinks.forEach(link => {
+                const href = link.getAttribute('href');
+                if (href === 'index.html' || href === '#') {
+                    link.classList.add('active');
+                } else {
+                    link.classList.remove('active');
+                }
+            });
+            activeFound = true;
+        }
 
-            if (scrollY > sectionTop && scrollY <= sectionTop + sectionHeight) {
-                navLinks.forEach(link => {
-                    if (link.getAttribute('href') === `#${sectionId}`) {
-                        link.classList.add('active');
-                    } else {
-                        link.classList.remove('active');
-                    }
-                });
-            }
-        });
+        // Check each section
+        if (!activeFound) {
+            sections.forEach(section => {
+                const sectionHeight = section.offsetHeight;
+                const sectionTop = section.offsetTop - 150; // Offset for fixed navbar
+                const sectionId = section.getAttribute('id');
+
+                if (scrollY >= sectionTop && scrollY < sectionTop + sectionHeight) {
+                    navLinks.forEach(link => {
+                        const href = link.getAttribute('href');
+                        if (href === `#${sectionId}`) {
+                            link.classList.add('active');
+                            activeFound = true;
+                        } else {
+                            // Remove active from all other links
+                            link.classList.remove('active');
+                        }
+                    });
+                }
+            });
+        }
+
+        // If we're past all sections, remove active from Home
+        if (!activeFound && scrollY > heroHeight) {
+            navLinks.forEach(link => {
+                const href = link.getAttribute('href');
+                if (href === 'index.html' || href === '#') {
+                    link.classList.remove('active');
+                }
+            });
+        }
     }
 
+    // Call on scroll and on load
     window.addEventListener('scroll', highlightNavigation);
+    highlightNavigation(); // Initial call
+    
+    // Re-run on window resize to handle screen size changes
+    window.addEventListener('resize', highlightNavigation);
 
     // Scroll to top functionality (if needed)
     const scrollToTopBtn = document.createElement('button');
