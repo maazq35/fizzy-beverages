@@ -2006,6 +2006,16 @@ h1, h2, h3, h4, h5, h6 {
     padding: 3rem 0 1.5rem;
 }
 
+.fssai-number {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.9);
+    letter-spacing: 0.5px;
+    padding: 0.5rem 0;
+    display: inline-block;
+    margin-bottom: 1.5rem;
+}
+
 .footer-brand {
     font-size: 1.5rem;
     color: #00e676;
