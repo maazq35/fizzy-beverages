@@ -182,11 +182,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Check if we're at the top (hero section) - highlight Home
         if (scrollY < heroHeight * 0.3) {
-            navLinks.forEach(link => {
+                navLinks.forEach(link => {
                 const href = link.getAttribute('href');
                 if (href === 'index.html' || href === '#') {
-                    link.classList.add('active');
-                } else {
+                        link.classList.add('active');
+                    } else {
                     link.classList.remove('active');
                 }
             });
@@ -208,12 +208,12 @@ document.addEventListener('DOMContentLoaded', function() {
                             activeFound = true;
                         } else {
                             // Remove active from all other links
-                            link.classList.remove('active');
-                        }
-                    });
-                }
-            });
-        }
+                        link.classList.remove('active');
+                    }
+                });
+            }
+        });
+    }
 
         // If we're past all sections, remove active from Home
         if (!activeFound && scrollY > heroHeight) {
@@ -233,40 +233,41 @@ document.addEventListener('DOMContentLoaded', function() {
     // Re-run on window resize to handle screen size changes
     window.addEventListener('resize', highlightNavigation);
 
-    // Scroll to top functionality (if needed)
+    // Scroll to top functionality - only show when footer is visible
     const scrollToTopBtn = document.createElement('button');
     scrollToTopBtn.innerHTML = '<i class="bi bi-arrow-up"></i>';
     scrollToTopBtn.className = 'scroll-to-top';
-    scrollToTopBtn.style.cssText = `
-        position: fixed;
-        bottom: 30px;
-        right: 30px;
-        width: 50px;
-        height: 50px;
-        background: #00a859;
-        color: white;
-        border: none;
-        border-radius: 50%;
-        font-size: 1.5rem;
-        cursor: pointer;
-        opacity: 0;
-        visibility: hidden;
-        transition: all 0.3s ease;
-        z-index: 1000;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-    `;
-
+    scrollToTopBtn.setAttribute('aria-label', 'Scroll to top');
+    
     document.body.appendChild(scrollToTopBtn);
 
+    // Function to check if footer is visible
+    function isFooterVisible() {
+        const footer = document.querySelector('.footer');
+        if (!footer) return false;
+        
+        const footerTop = footer.offsetTop;
+        const footerHeight = footer.offsetHeight;
+        const windowHeight = window.innerHeight;
+        const scrollY = window.pageYOffset;
+        
+        // Check if footer is in viewport or user has scrolled past it
+        return scrollY + windowHeight >= footerTop;
+    }
+
+    // Show button only when footer is visible
     window.addEventListener('scroll', function() {
-        if (window.pageYOffset > 300) {
-            scrollToTopBtn.style.opacity = '1';
-            scrollToTopBtn.style.visibility = 'visible';
+        if (isFooterVisible()) {
+            scrollToTopBtn.classList.add('show');
         } else {
-            scrollToTopBtn.style.opacity = '0';
-            scrollToTopBtn.style.visibility = 'hidden';
+            scrollToTopBtn.classList.remove('show');
         }
     });
+    
+    // Also check on page load
+    if (isFooterVisible()) {
+        scrollToTopBtn.classList.add('show');
+    }
 
     scrollToTopBtn.addEventListener('click', function() {
         window.scrollTo({
